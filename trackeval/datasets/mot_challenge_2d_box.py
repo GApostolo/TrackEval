@@ -23,7 +23,7 @@ class MotChallenge2DBox(_BaseDataset):
             'TRACKERS_TO_EVAL': None,  # Filenames of trackers to eval (if None, all in folder)
             'CLASSES_TO_EVAL': ['pedestrian'],  # Valid: ['pedestrian']
             'BENCHMARK': 'MOT17',  # Valid: 'MOT17', 'MOT16', 'MOT20', 'MOT15'
-            'SPLIT_TO_EVAL': 'train',  # Valid: 'train', 'test', 'all'
+            'SPLIT_TO_EVAL': 'train',  # Valid: 'train', 'test', 'all', 'None'
             'INPUT_AS_ZIP': False,  # Whether tracker input files are zipped
             'PRINT_CONFIG': True,  # Whether to print current config
             'DO_PREPROC': True,  # Whether to perform preprocessing (never done for MOT15)
@@ -47,7 +47,10 @@ class MotChallenge2DBox(_BaseDataset):
         self.config = utils.init_config(config, self.get_default_dataset_config(), self.get_name())
 
         self.benchmark = self.config['BENCHMARK']
-        gt_set = self.config['BENCHMARK'] + '-' + self.config['SPLIT_TO_EVAL']
+        if self.config['SPLIT_TO_EVAL'] != 'None':
+            gt_set = self.config['BENCHMARK'] + '-' + self.config['SPLIT_TO_EVAL']
+        else:
+            gt_set = self.config['BENCHMARK']
         self.gt_set = gt_set
         if not self.config['SKIP_SPLIT_FOL']:
             split_fol = gt_set
